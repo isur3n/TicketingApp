@@ -1,0 +1,52 @@
+################################################################################
+This is simple implementation of Ticketing Service Application
+################################################################################
+
+********* TicketingApp
+
+It has 2 modules. Currently those are built independenty. However pom file can be added so that 
+both can be built, run, tested as a single project.
+
+1. TicketingService - Working
+2. TicketingAPI - Not complete (future use)
+
+********* TicketingService
+
+It has 2 primary booking algorithms
+
+1. Simple
+2. CloseGroup
+
+"Simple" algorithm simply allocates nearest "x" number of seats requested during
+hold. "CloseGroup" algorithm tries to book tickets close to each other. It is 
+currently working however, there need some additional optimization to logic.
+Application currently makes use of "Simple" algorith. 
+
+Assumptions ---
+1. Stage is square/rectangle only (row x col model)
+2. Logging is console based. It can be changed to file based in /src/main/resources/log4j.properties file.
+3. Certain parameters are read from configuration file /src/main/resources/ticketingService.properties.
+4. SeatHold expiry results in cancel operation and held seats returned to availability pool.
+
+JUnit
+It has total 42 JUnit testcases
+
+To Build
+mvn clean install
+
+To run JUnit
+mvn test
+
+CommandLine - Can be invoked from root directory by running command. It does some predetermined operations.
+java -classpath libs\log4j-1.2.17.jar -jar target\ticketingService-1.0.jar com.walmart.surendra.ticketingService.app.demo
+
+Can be added as module in a maven project by adding below dependency.
+<dependecy>
+    <groupId>com.walmart.surendra</groupId>
+    <artifactId>ticketingService</artifactId>
+    <version>1.0</version>
+</dependency>
+
+******** TicketingAPI 
+
+This is work in progress considering "TicketingService" can be used as a REST API.
