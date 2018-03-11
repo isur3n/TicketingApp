@@ -45,6 +45,7 @@
                                     <mainClass>com.walmart.surendra.ticketingService.app.demo</mainClass>
                                 </transformer>
                             </transformers>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
                     </execution>
                 </executions>
