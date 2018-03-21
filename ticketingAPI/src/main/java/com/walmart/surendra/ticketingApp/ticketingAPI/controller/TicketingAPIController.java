@@ -1,17 +1,19 @@
 package com.walmart.surendra.ticketingApp.ticketingAPI.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.walmart.surendra.ticketingApp.ticketingAPI.apiResponses.FindHoldResponse;
 import com.walmart.surendra.ticketingApp.ticketingAPI.apiResponses.NumSeatsResponse;
-import com.walmart.surendra.ticketingService.interfaces.TicketService;
+import com.walmart.surendra.ticketingApp.ticketingService.interfaces.TicketService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,19 +21,23 @@ import java.util.Map;
 /**
  * Created by Surendra Raut on 11/30/2017.
  */
-@Controller
-@RequestMapping("/ticketingAPI")
+@RestController
 public class TicketingAPIController {
 
     private static final Logger LOGGER = Logger.getLogger(TicketingAPIController.class);
 
     private final static ObjectMapper jSonMapper = new ObjectMapper();
 
-    @Autowired
+    @Autowired @Qualifier("SimpleGroupService")
     TicketService ts;
 
-    @RequestMapping(value="/numSeatsAvailable/", method= RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> numSeatsAvailable() {
+    @RequestMapping("/")
+    public String printHello() {
+        return "Hello Spring Boot!!";
+    }
+
+    @RequestMapping(value="/numSeatsAvailable", method=RequestMethod.POST)
+    public ResponseEntity<String> getSeatsAvailable() {
 
         ResponseEntity<String> response = null;
         try {
@@ -47,11 +53,14 @@ public class TicketingAPIController {
     }
 
     @RequestMapping(value="/findAndHoldSeats/", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> findAndHoldSeats(@RequestBody String jsonData) {
+    public ResponseEntity<String> findAndHoldSeats(@RequestBody FindHoldResponse request) {
 
-        ResponseEntity<String> response = null;
+        ResponseEntity<String> response=new ResponseEntity<String>("", HttpStatus.OK);
+        HttpStatus status;
+
+        FindHoldResponse holdResponse = new FindHoldResponse();
         try {
-            Map<String, Integer> responseMap = new HashMap<String, Integer>();
+            status = HttpStatus.OK;
         } catch (Exception e) {
             response = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             LOGGER.error(e);
